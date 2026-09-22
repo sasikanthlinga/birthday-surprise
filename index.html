@@ -94,6 +94,28 @@ text-shadow:1px 1px 8px rgba(0,0,0,0.8);
         opacity: 0;
     }
 }
+.heart-burst{
+    position:fixed;
+    font-size:28px;
+    pointer-events:none;
+    z-index:9999;
+
+    animation: heartFly 1.5s ease-out forwards;
+}
+
+@keyframes heartFly{
+    from{
+        transform:translate(0,0) scale(1);
+        opacity:1;
+    }
+    to{
+        transform:
+            translate(var(--x), var(--y))
+            scale(1.8);
+
+        opacity:0;
+    }
+}
 </style>
 </head>
 
@@ -103,6 +125,53 @@ text-shadow:1px 1px 8px rgba(0,0,0,0.8);
 <audio autoplay loop controls>
     birthday-song.mp3
 </audio-->
+<script>
+
+document.querySelectorAll(".birthday-photo")
+.forEach(photo => {
+
+    photo.addEventListener("click", function(e){
+
+        for(let i=0; i<25; i++){
+
+            const heart =
+                document.createElement("div");
+
+            heart.className = "heart-burst";
+            heart.innerHTML = "💖";
+
+            heart.style.left =
+                e.clientX + "px";
+
+            heart.style.top =
+                e.clientY + "px";
+
+            const x =
+                (Math.random()-0.5)*300;
+
+            const y =
+                (Math.random()-0.5)*300;
+
+            heart.style.setProperty(
+                "--x", x+"px"
+            );
+
+            heart.style.setProperty(
+                "--y", y+"px"
+            );
+
+            document.body.appendChild(
+                heart
+            );
+
+            setTimeout(() => {
+                heart.remove();
+            },1500);
+        }
+    });
+});
+
+</script>
 
 <div class="container">
 
@@ -114,12 +183,18 @@ text-shadow:1px 1px 8px rgba(0,0,0,0.8);
         May all your dreams come true and your year be full of success! 🌟
     </p>
 
-    <div class="gallery">
+    <!--div class="gallery">
         <img src="photo1.jpeg" alt="Photo 1">
         <img src="photo5.jpeg" alt="Photo 2">
         <img src="photo3.jpeg" alt="Photo 3">
         <img src="photo4.jpeg" alt="Photo 4">
-    </div>
+</div-->
+    <div class="gallery">
+    <img class="birthday-photo" src="photo1.jpeg" alt="Photo 1">
+    <img class="birthday-photo" src="photo5.jpeg" alt="Photo 2">
+    <img class="birthday-photo" src="photo3.jpeg" alt="Photo 3">
+    <img class="birthday-photo" src="photo4.jpeg" alt="Photo 4">
+</div>
 
     <br>
 
