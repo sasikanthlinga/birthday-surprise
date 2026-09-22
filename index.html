@@ -7,16 +7,22 @@
 
 <style>
 
-body{
+*{
     margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
     font-family:Arial,sans-serif;
     text-align:center;
     min-height:100vh;
+    padding:20px;
 
     background:
     linear-gradient(
-        rgba(255,20,147,0.35),
-        rgba(255,182,193,0.35)
+        rgba(255,20,147,0.25),
+        rgba(255,182,193,0.25)
     ),
     url('photo8.jpeg');
 
@@ -26,43 +32,50 @@ body{
     background-attachment:fixed;
 }
 
-/* Glassmorphism Container */
-.container{
-    max-width:1200px;
-    margin:30px auto;
-    padding:40px;
+/* Birthday Card */
 
-    background:rgba(255,255,255,0.15);
+.container{
+    width:90%;
+    max-width:1000px;
+
+    margin:30px auto;
+    padding:30px;
+
+    background:rgba(255,255,255,0.08);
+
     border-radius:30px;
 
-    backdrop-filter:blur(12px);
-    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,0.15);
 
-    border:1px solid rgba(255,255,255,0.2);
-
-    box-shadow:0 8px 32px rgba(0,0,0,0.25);
+    box-shadow:
+    0 8px 25px rgba(0,0,0,0.25);
 }
 
 h1{
     color:white;
     font-size:3rem;
-    text-shadow:2px 2px 10px rgba(0,0,0,0.8);
+
+    text-shadow:
+    2px 2px 10px rgba(0,0,0,0.7);
+}
+
+.message-box{
+    background:rgba(0,0,0,0.25);
+    padding:20px;
+    border-radius:20px;
+    margin-top:20px;
 }
 
 .message{
     color:white;
     font-size:1.2rem;
-    max-width:800px;
-    margin:auto;
     line-height:1.8;
-    text-shadow:1px 1px 6px rgba(0,0,0,0.6);
 }
 
 .memories-title{
-    margin-top:20px;
     color:white;
     font-size:24px;
-    font-style:italic;
+    margin-top:25px;
     text-shadow:0 0 10px white;
 }
 
@@ -73,143 +86,202 @@ h1{
     justify-content:center;
     flex-wrap:wrap;
     gap:25px;
-    margin-top:30px;
+    margin-top:25px;
 }
 
 .birthday-photo{
-    width:250px;
+    width:240px;
     height:300px;
+
     object-fit:cover;
 
     border-radius:20px;
+
     cursor:pointer;
 
-    border:2px solid rgba(255,255,255,0.3);
+    border:3px solid rgba(255,255,255,0.4);
 
     box-shadow:
-    0 8px 32px rgba(0,0,0,0.25);
+    0 8px 20px rgba(0,0,0,0.35);
 
-    transition:all .4s ease;
+    transition:.4s ease;
+
+    animation:
+    floatPhoto 4s ease-in-out infinite;
 }
 
 .gallery img:nth-child(1){
     transform:rotate(-5deg);
+    animation-delay:0s;
 }
 
 .gallery img:nth-child(2){
-    transform:rotate(4deg);
+    transform:rotate(5deg);
+    animation-delay:1s;
 }
 
 .gallery img:nth-child(3){
-    transform:rotate(-3deg);
+    transform:rotate(-4deg);
+    animation-delay:2s;
 }
 
 .gallery img:nth-child(4){
-    transform:rotate(5deg);
+    transform:rotate(4deg);
+    animation-delay:3s;
 }
 
 .birthday-photo:hover{
-    transform:scale(1.08);
+    scale:1.08;
 }
 
-/* Hearts */
+@keyframes floatPhoto{
 
-.heart{
+    0%,100%{
+        translate:0 0;
+    }
+
+    50%{
+        translate:0 -12px;
+    }
+}
+
+/* Burst Animation */
+
+.burst{
     position:fixed;
-    font-size:28px;
+
     pointer-events:none;
+
     z-index:9999;
 
-    animation:heartFly 1s linear forwards;
+    font-size:28px;
+
+    animation:
+    burstAnimation 1.2s ease-out forwards;
 }
 
-@keyframes heartFly{
+@keyframes burstAnimation{
+
     from{
         opacity:1;
-        transform:translate(0,0);
+        transform:
+        translate(0,0)
+        scale(1);
     }
 
     to{
         opacity:0;
+
         transform:
-        translate(var(--x), var(--y));
+        translate(var(--x),var(--y))
+        scale(2);
     }
 }
 
 /* Button */
 
 .btn{
-    margin-top:25px;
+    margin-top:30px;
 
     background:#ff0066;
     color:white;
 
-    padding:12px 25px;
-
     border:none;
-    border-radius:25px;
+
+    padding:15px 30px;
+
+    border-radius:30px;
+
+    cursor:pointer;
 
     font-size:18px;
-    cursor:pointer;
+
+    transition:.3s;
 }
 
 .btn:hover{
     background:#d60057;
+    transform:scale(1.05);
 }
+
+/* Mobile */
 
 @media(max-width:768px){
 
-    .birthday-photo{
-        width:170px;
-        height:210px;
+    .container{
+        width:100%;
+        padding:20px;
     }
 
     h1{
         font-size:2rem;
     }
 
-    .container{
-        margin:15px;
-        padding:20px;
+    .message{
+        font-size:1rem;
+    }
+
+    .birthday-photo{
+        width:160px;
+        height:210px;
+    }
+
+    .btn{
+        width:100%;
+        max-width:300px;
     }
 }
 
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
     <h1>🎉 Happy Birthday Nainee 🎂</h1>
 
-    <p class="message">
-        Wishing you a wonderful birthday filled with happiness,
-        laughter, love, and unforgettable memories.
-        May all your dreams come true and your year be filled
-        with joy, success and beautiful moments. ✨
-    </p>
+    <div class="message-box">
+
+        <p class="message">
+            Wishing you a wonderful birthday filled with happiness,
+            laughter, love, and unforgettable memories. 💖
+            May all your dreams come true and your life be filled
+            with success, joy, and beautiful moments. ✨
+        </p>
+
+    </div>
 
     <div class="memories-title">
         ✨ A Few Beautiful Memories ✨
     </div>
 
-    <p style="color:white;">
+    <p style="color:white; margin-top:10px;">
         💖 Tap Any Photo For A Surprise 💖
     </p>
 
     <div class="gallery">
 
-        <img class="birthday-photo" src="photo1.jpeg" alt="Photo 1">
+        <img class="birthday-photo"
+             src="photo1.jpeg"
+             alt="Photo 1">
 
-        <img class="birthday-photo" src="photo5.jpeg" alt="Photo 2">
+        <img class="birthday-photo"
+             src="photo5.jpeg"
+             alt="Photo 2">
 
-        <img class="birthday-photo" src="photo3.jpeg" alt="Photo 3">
+        <img class="birthday-photo"
+             src="photo3.jpeg"
+             alt="Photo 3">
 
-        <img class="birthday-photo" src="photo4.jpeg" alt="Photo 4">
+        <img class="birthday-photo"
+             src="photo4.jpeg"
+             alt="Photo 4">
 
     </div>
 
-    <button class="btn"
+    <button
+        class="btn"
         onclick="window.location.href='treats.html'">
 
         Click for a Special Wish 🎁
@@ -220,56 +292,86 @@ h1{
 
 <script>
 
-document.querySelectorAll('.birthday-photo')
+const items = [
+    "💖",
+    "❤️",
+    "🌹",
+    "🎂",
+    "🎁",
+    "✨",
+    "🎉"
+];
+
+document
+.querySelectorAll('.birthday-photo')
 .forEach(photo => {
 
-    photo.addEventListener('click', (e) => {
-
-        const items =
-        ['💖','❤️','🌹','✨','🎉'];
-
-        for(let i=0;i<20;i++){
-
-            const heart =
-            document.createElement('div');
-
-            heart.className='heart';
-
-            heart.innerHTML=
-            items[Math.floor(
-                Math.random()*items.length
-            )];
-
-            heart.style.left =
-            e.pageX + 'px';
-
-            heart.style.top =
-            e.pageY + 'px';
-
-            heart.style.setProperty(
-                '--x',
-                ((Math.random()-0.5)*300)+'px'
-            );
-
-            heart.style.setProperty(
-                '--y',
-                ((Math.random()-0.5)*300)+'px'
-            );
-
-            document.body.appendChild(
-                heart
-            );
-
-            setTimeout(()=>{
-                heart.remove();
-            },1000);
-        }
-
-    });
+    photo.addEventListener('click', burst);
+    photo.addEventListener('touchstart', burst);
 
 });
+
+function burst(e){
+
+    let x,y;
+
+    if(e.touches){
+
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+
+    }else{
+
+        x = e.clientX;
+        y = e.clientY;
+    }
+
+    for(let i=0;i<30;i++){
+
+        let item =
+        document.createElement('div');
+
+        item.className='burst';
+
+        item.innerHTML =
+        items[Math.floor(
+            Math.random()*items.length
+        )];
+
+        item.style.left=x+'px';
+        item.style.top=y+'px';
+
+        const angle =
+        Math.random()*Math.PI*2;
+
+        const distance =
+        80 + Math.random()*250;
+
+        const moveX =
+        Math.cos(angle)*distance;
+
+        const moveY =
+        Math.sin(angle)*distance;
+
+        item.style.setProperty(
+            '--x',
+            moveX+'px'
+        );
+
+        item.style.setProperty(
+            '--y',
+            moveY+'px'
+        );
+
+        document.body.appendChild(item);
+
+        setTimeout(()=>{
+            item.remove();
+        },1200);
+    }
+}
 
 </script>
 
 </body>
-</html>
+</html
