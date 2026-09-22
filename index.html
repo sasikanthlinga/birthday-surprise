@@ -3,68 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday</title>
+<title>Happy Birthday Nainee 🎂</title>
 
 <style>
+
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:
-linear-gradient(
-rgba(255, 20, 147, 0.35),
-rgba(255, 182, 193, 0.35)
-),
-url('photo8.jpeg');
-background-size:cover;
-background-position:center;
-background-repeat:no-repeat;
-background-attachment:fixed;
+    margin:0;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    min-height:100vh;
+
+    background:
+    linear-gradient(
+        rgba(255,20,147,0.35),
+        rgba(255,182,193,0.35)
+    ),
+    url('photo8.jpeg');
+
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-attachment:fixed;
 }
 
+/* Glassmorphism Container */
 .container{
-    padding:30px;
+    max-width:1200px;
+    margin:30px auto;
+    padding:40px;
+
+    background:rgba(255,255,255,0.15);
+    border-radius:30px;
+
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    box-shadow:0 8px 32px rgba(0,0,0,0.25);
 }
 
 h1{
-color:white;
-font-size:3rem;
-text-shadow:2px 2px 10px rgba(0,0,0,0.8);
+    color:white;
+    font-size:3rem;
+    text-shadow:2px 2px 10px rgba(0,0,0,0.8);
 }
+
 .message{
-color:white;
-text-shadow:1px 1px 8px rgba(0,0,0,0.8);
+    color:white;
+    font-size:1.2rem;
+    max-width:800px;
+    margin:auto;
+    line-height:1.8;
+    text-shadow:1px 1px 6px rgba(0,0,0,0.6);
 }
+
+.memories-title{
+    margin-top:20px;
+    color:white;
+    font-size:24px;
+    font-style:italic;
+    text-shadow:0 0 10px white;
+}
+
+/* Gallery */
 
 .gallery{
     display:flex;
     justify-content:center;
     flex-wrap:wrap;
-    gap:15px;
-    margin-top:20px;
+    gap:25px;
+    margin-top:30px;
 }
 
-.gallery img{
+.birthday-photo{
     width:250px;
     height:300px;
     object-fit:cover;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.3);
+
+    border-radius:20px;
+    cursor:pointer;
+
+    border:2px solid rgba(255,255,255,0.3);
+
+    box-shadow:
+    0 8px 32px rgba(0,0,0,0.25);
+
+    transition:all .4s ease;
 }
 
-.message{
-    font-size:1.3rem;
-    color:#444;
-    max-width:800px;
-    margin:auto;
-    padding:20px;
+.gallery img:nth-child(1){
+    transform:rotate(-5deg);
 }
+
+.gallery img:nth-child(2){
+    transform:rotate(4deg);
+}
+
+.gallery img:nth-child(3){
+    transform:rotate(-3deg);
+}
+
+.gallery img:nth-child(4){
+    transform:rotate(5deg);
+}
+
+.birthday-photo:hover{
+    transform:scale(1.08);
+}
+
+/* Hearts */
+
+.heart{
+    position:fixed;
+    font-size:28px;
+    pointer-events:none;
+    z-index:9999;
+
+    animation:heartFly 1s linear forwards;
+}
+
+@keyframes heartFly{
+    from{
+        opacity:1;
+        transform:translate(0,0);
+    }
+
+    to{
+        opacity:0;
+        transform:
+        translate(var(--x), var(--y));
+    }
+}
+
+/* Button */
 
 .btn{
+    margin-top:25px;
+
     background:#ff0066;
     color:white;
+
     padding:12px 25px;
+
     border:none;
     border-radius:25px;
+
     font-size:18px;
     cursor:pointer;
 }
@@ -72,106 +156,27 @@ text-shadow:1px 1px 8px rgba(0,0,0,0.8);
 .btn:hover{
     background:#d60057;
 }
-    .confetti-piece {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    pointer-events: none;
-    z-index: 9999;
-    border-radius: 2px;
-}
 
-@keyframes explode {
-    from {
-        transform: translate(0,0) rotate(0deg);
-        opacity: 1;
+@media(max-width:768px){
+
+    .birthday-photo{
+        width:170px;
+        height:210px;
     }
 
-    to {
-        transform:
-            translate(var(--x), var(--y))
-            rotate(720deg);
-        opacity: 0;
+    h1{
+        font-size:2rem;
+    }
+
+    .container{
+        margin:15px;
+        padding:20px;
     }
 }
-.heart-burst{
-    position:fixed;
-    font-size:28px;
-    pointer-events:none;
-    z-index:9999;
 
-    animation: heartFly 1.5s ease-out forwards;
-}
-
-@keyframes heartFly{
-    from{
-        transform:translate(0,0) scale(1);
-        opacity:1;
-    }
-    to{
-        transform:
-            translate(var(--x), var(--y))
-            scale(1.8);
-
-        opacity:0;
-    }
-}
 </style>
 </head>
-
 <body>
-
-<!-- Background Music >
-<audio autoplay loop controls>
-    birthday-song.mp3
-</audio-->
-<script>
-
-document.querySelectorAll(".birthday-photo")
-.forEach(photo => {
-
-    photo.addEventListener("click", function(e){
-
-        for(let i=0; i<25; i++){
-
-            const heart =
-                document.createElement("div");
-
-            heart.className = "heart-burst";
-            heart.innerHTML = "💖";
-
-            heart.style.left =
-                e.clientX + "px";
-
-            heart.style.top =
-                e.clientY + "px";
-
-            const x =
-                (Math.random()-0.5)*300;
-
-            const y =
-                (Math.random()-0.5)*300;
-
-            heart.style.setProperty(
-                "--x", x+"px"
-            );
-
-            heart.style.setProperty(
-                "--y", y+"px"
-            );
-
-            document.body.appendChild(
-                heart
-            );
-
-            setTimeout(() => {
-                heart.remove();
-            },1500);
-        }
-    });
-});
-
-</script>
 
 <div class="container">
 
@@ -180,29 +185,91 @@ document.querySelectorAll(".birthday-photo")
     <p class="message">
         Wishing you a wonderful birthday filled with happiness,
         laughter, love, and unforgettable memories.
-        May all your dreams come true and your year be full of success! 🌟
+        May all your dreams come true and your year be filled
+        with joy, success and beautiful moments. ✨
     </p>
 
-    <!--div class="gallery">
-        <img src="photo1.jpeg" alt="Photo 1">
-        <img src="photo5.jpeg" alt="Photo 2">
-        <img src="photo3.jpeg" alt="Photo 3">
-        <img src="photo4.jpeg" alt="Photo 4">
-</div-->
+    <div class="memories-title">
+        ✨ A Few Beautiful Memories ✨
+    </div>
+
+    <p style="color:white;">
+        💖 Tap Any Photo For A Surprise 💖
+    </p>
+
     <div class="gallery">
-    <img class="birthday-photo" src="photo1.jpeg" alt="Photo 1">
-    <img class="birthday-photo" src="photo5.jpeg" alt="Photo 2">
-    <img class="birthday-photo" src="photo3.jpeg" alt="Photo 3">
-    <img class="birthday-photo" src="photo4.jpeg" alt="Photo 4">
-</div>
 
-    <br>
+        <img class="birthday-photo" src="photo1.jpeg" alt="Photo 1">
 
-    <button class="btn" onclick="window.location.href='treats.html'">
+        <img class="birthday-photo" src="photo5.jpeg" alt="Photo 2">
+
+        <img class="birthday-photo" src="photo3.jpeg" alt="Photo 3">
+
+        <img class="birthday-photo" src="photo4.jpeg" alt="Photo 4">
+
+    </div>
+
+    <button class="btn"
+        onclick="window.location.href='treats.html'">
+
         Click for a Special Wish 🎁
+
     </button>
 
 </div>
+
+<script>
+
+document.querySelectorAll('.birthday-photo')
+.forEach(photo => {
+
+    photo.addEventListener('click', (e) => {
+
+        const items =
+        ['💖','❤️','🌹','✨','🎉'];
+
+        for(let i=0;i<20;i++){
+
+            const heart =
+            document.createElement('div');
+
+            heart.className='heart';
+
+            heart.innerHTML=
+            items[Math.floor(
+                Math.random()*items.length
+            )];
+
+            heart.style.left =
+            e.pageX + 'px';
+
+            heart.style.top =
+            e.pageY + 'px';
+
+            heart.style.setProperty(
+                '--x',
+                ((Math.random()-0.5)*300)+'px'
+            );
+
+            heart.style.setProperty(
+                '--y',
+                ((Math.random()-0.5)*300)+'px'
+            );
+
+            document.body.appendChild(
+                heart
+            );
+
+            setTimeout(()=>{
+                heart.remove();
+            },1000);
+        }
+
+    });
+
+});
+
+</script>
 
 </body>
 </html>
