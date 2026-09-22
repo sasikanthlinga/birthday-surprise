@@ -72,6 +72,28 @@ text-shadow:1px 1px 8px rgba(0,0,0,0.8);
 .btn:hover{
     background:#d60057;
 }
+    .confetti-piece {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    pointer-events: none;
+    z-index: 9999;
+    border-radius: 2px;
+}
+
+@keyframes explode {
+    from {
+        transform: translate(0,0) rotate(0deg);
+        opacity: 1;
+    }
+
+    to {
+        transform:
+            translate(var(--x), var(--y))
+            rotate(720deg);
+        opacity: 0;
+    }
+}
 </style>
 </head>
 
