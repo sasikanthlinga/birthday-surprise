@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Birthday Puzzle</title>
+
+<style>
+
+body{
+    margin:0;
+    text-align:center;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+h1{
+    margin:15px;
+}
+
+button{
+    padding:12px 20px;
+    border:none;
+    border-radius:8px;
+    background:#ff4da6;
+    color:white;
+    font-size:16px;
+    margin-bottom:15px;
+}
+
+#board{
+    width:360px;
+    height:360px;
+    margin:auto;
+    border:3px solid white;
+    position:relative;
+    overflow:hidden;
+    background:#222;
+}
+
+.piece{
+    position:absolute;
+    width:120px;
+    height:120px;
+    background-image:url("photo5.jpeg");
+    background-size:360px 360px;
+    border:1px solid rgba(255,255,255,.2);
+    cursor:pointer;
+    transition:.2s;
+}
+
+#overlay{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.95);
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:9999;
+}
+
+#overlay h1{
+    color:#ff4da6;
+    font-size:60px;
+}
+
+#overlay p{
+    font-size:22px;
+    max-width:700px;
+    padding:20px;
+}
+
+.confetti{
+    position:fixed;
+    width:10px;
+    height:10px;
+    top:-20px;
+    z-index:10000;
+}
+
+@media(max-width:500px){
+
+    #board{
+        width:300px;
+        height:300px;
+    }
+
+    .piece{
+        width:100px;
+        height:100px;
+        background-size:300px 300px;
+    }
+
+    #overlay h1{
+        font-size:40px;
+    }
+
+    #overlay p{
+        font-size:18px;
+    }
+}
+
+</style>
+
+</head>
+<body>
+
+<h1>🧩 Birthday Puzzle</h1>
+
+<button onclick="shufflePuzzle()">
+🔀 Shuffle
+</button>
+
+<div id="board"></div>
+
+<div id="overlay">
+
+<h1>❤️ Happy Birthday ❤️</h1>
+
+<p>
+May your life be filled with happiness,
+success, good health and beautiful memories.
+</p>
+
+<p>
+May every day bring new reasons to smile and
+all your dreams come true.
+</p>
+
+<p>
+🎂 Have an Amazing Birthday! 🎂
+</p>
+
+</div>
+
+<script>
+
+const board = document.getElementById("board");
+
+const mobile = window.innerWidth < 500;
+
+const SIZE = mobile ? 100 : 120;
+
+let positions = [];
+
+for(let i=0;i<9;i++){
+
+    positions.push(i);
+
+    const piece =
+    document.createElement("div");
+
+    piece.className = "piece";
+
+    piece.dataset.correct = i;
+    piece.dataset.current = i;
+
+    const row = Math.floor(i/3);
+    const col = i%3;
+
+    piece.style.left =
+    (col*SIZE)+"px";
+
+    piece.style.top =
+    (row*SIZE)+"px";
+
+    piece.style.backgroundPosition =
+    (-col*SIZE)+"px "+
+    (-row*SIZE)+"px";
+
+    board.appendChild(piece);
+}
+
+let selected = null;
+
+board.addEventListener("click",e=>{
+
+    const piece =
+    e.target.closest(".piece");
+
+    if(!piece) return;
+
+    if(selected===null){
+
+        selected = piece;
+
+        piece.style.outline =
+        "3px solid yellow";
+
+        return;
+    }
+
+    if(selected===piece){
+
+        piece.style.outline = "";
+
+        selected = null;
+
+        return;
+    }
+
+    swapPieces(selected,piece);
+
+    selected.style.outline="";
+
+    selected=null;
+
+    checkSolved();
+
+});
+
+function swapPieces(a,b){
+
+    const posA =
+    Number(a.dataset.current);
+
+    const posB =
+    Number(b.dataset.current);
+
+    movePiece(a,posB);
+    movePiece(b,posA);
+}
+
+function movePiece(piece,pos){
+
+    piece.dataset.current = pos;
+
+    const row =
+    Math.floor(pos/3);
+
+    const col =
+    pos%3;
+
+    piece.style.left =
+    (col*SIZE)+"px";
+
+    piece.style.top =
+    (row*SIZE)+"px";
+}
+
+function shufflePuzzle(){
+
+    const pieces =
+    [...document.querySelectorAll(".piece")];
+
+    let slots =
+    [0,1,2,3,4,5,6,7,8];
+
+    slots.sort(
+    ()=>Math.random()-0.5
+    );
+
+    pieces.forEach((p,index)=>{
+
+        movePiece(
+        p,
+        slots[index]
+        );
+
+        p.style.display =
+        "block";
+    });
+
+    document
+    .getElementById("overlay")
+    .style.display="none";
+}
+
+function checkSolved(){
+
+    const pieces =
+    [...document.querySelectorAll(".piece")];
+
+    const solved =
+    pieces.every(
+
+    p=>
+
+    Number(
+    p.dataset.current
+    )
+
+    ===
+
+    Number(
+    p.dataset.correct
+    )
+
+    );
+
+    if(!solved) return;
+
+    pieces.forEach(p=>{
+
+        p.style.display="none";
+
+    });
+
+    launchConfetti();
+
+    document
+    .getElementById("overlay")
+    .style.display="flex";
+}
+
+function launchConfetti(){
+
+    const colors=[
+    "#ff4da6",
+    "#00ffff",
+    "#ffff00",
+    "#00ff66",
+    "#ff6600"
+    ];
+
+    for(let i=0;i<200;i++){
+
+        const c =
+        document.createElement("div");
+
+        c.className =
+        "confetti";
+
+        c.style.left =
+        Math.random()*100+"vw";
+
+        c.style.background =
+        colors[
+        Math.floor(
+        Math.random()*colors.length
+        )
+        ];
+
+        document.body
+        .appendChild(c);
+
+        c.animate([
+            {
+                transform:
+                "translateY(0)",
+                opacity:1
+            },
+            {
+                transform:
+                "translateY(110vh) rotate(720deg)",
+                opacity:0
+            }
+        ],{
+            duration:
+            3000+
+            Math.random()*3000,
+            easing:"linear"
+        });
+    }
+}
+
+shufflePuzzle();
+
+</script>
+
+</body>
+</html>
