@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Magic Dust Reveal</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#000;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+}
+
+.container{
+    position:relative;
+    width:100vw;
+    height:100vh;
+}
+
+.hidden-image{
+    position:absolute;
+    inset:0;
+    background-image:url("photo5.jpeg");
+    background-size:cover;
+    background-position:center;
+}
+
+canvas{
+    position:absolute;
+    inset:0;
+    touch-action:none;
+}
+
+.sparkle{
+    position:absolute;
+    width:18px;
+    height:18px;
+    pointer-events:none;
+    z-index:999;
+    animation:goldDust 1.5s ease-out forwards;
+}
+
+.sparkle::before{
+    content:"✦";
+    position:absolute;
+    color:#FFD700;
+    font-size:18px;
+
+    text-shadow:
+        0 0 5px #FFD700,
+        0 0 10px #FFD700,
+        0 0 20px #FFF8DC,
+        0 0 40px #FFD700;
+}
+
+@keyframes goldDust{
+
+    0%{
+        opacity:1;
+        transform:
+        translate(0,0)
+        scale(1)
+        rotate(0deg);
+    }
+
+    100%{
+        opacity:0;
+        transform:
+        translate(
+            var(--tx),
+            var(--ty)
+        )
+        scale(2)
+        rotate(360deg);
+    }
+}
+
+@keyframes fadeAura{
+
+    from{
+        opacity:.8;
+        transform:scale(.5);
+    }
+
+    to{
+        opacity:0;
+        transform:scale(2);
+    }
+}
+
+#instruction{
+
+    position:fixed;
+    top:30px;
+    left:50%;
+
+    transform:translateX(-50%);
+
+    color:#FFD700;
+
+    font-size:24px;
+    font-weight:bold;
+
+    padding:12px 24px;
+
+    border-radius:50px;
+
+    background:rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(10px);
+
+    text-shadow:
+        0 0 10px #FFD700,
+        0 0 20px #FFD700,
+        0 0 40px #FFF8DC;
+
+    box-shadow:
+        0 0 10px #fff,
+        0 0 20px #00ffff,
+        0 0 40px #00ffff;
+
+    z-index:1000;
+
+    transition:1s;
+
+    animation:pulseGlow 2s infinite;
+}
+
+@keyframes pulseGlow{
+
+    0%,100%{
+        transform:translateX(-50%) scale(1);
+    }
+
+    50%{
+        transform:translateX(-50%) scale(1.05);
+    }
+}
+
+body,
+canvas{
+    touch-action:none;
+    overscroll-behavior:none;
+}
+
+#message{
+
+    position:fixed;
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+
+    background:rgba(0,0,0,.85);
+
+    color:white;
+
+    z-index:1000;
+
+    text-align:center;
+}
+
+#message h1{
+
+    font-size:60px;
+
+    color:#ff4da6;
+
+    text-shadow:
+    0 0 20px white,
+    0 0 40px #ff4da6;
+}
+
+#message p{
+
+    font-size:24px;
+
+    margin-top:20px;
+
+    max-width:700px;
+
+    line-height:1.6;
+}
+
+@media(max-width:768px){
+
+    #message h1{
+        font-size:40px;
+    }
+
+    #message p{
+        font-size:18px;
+        padding:20px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div id="instruction">
+✨ Please swipe on the screen to reveal the surprise ✨
+</div>
+
+<div class="container">
+
+    <div class="hidden-image"></div>
+
+    <canvas id="scratch"></canvas>
+
+</div>
+
+<div id="message">
+
+    <h1>❤️ Happy Birthday ❤️</h1>
+
+    <p>
+        May your special day be filled with
+        happiness, laughter, and beautiful memories.
+        Wishing you success, good health, and endless joy.
+        May all your dreams come true!
+    </p>
+
+</div>
+
+<script>
+
+const canvas =
+document.getElementById("scratch");
+
+const ctx =
+canvas.getContext("2d");
+
+let drawing = false;
+
+function resize(){
+
+    canvas.width =
+    window.innerWidth;
+
+    canvas.height =
+    window.innerHeight;
+
+    ctx.fillStyle = "#111";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+}
+
+resize();
+
+window.addEventListener(
+"resize",
+resize
+);
+
+function sparkle(x,y){
+
+    for(let i=0;i<12;i++){
+
+        const star =
+        document.createElement("div");
+
+        star.className =
+        "sparkle";
+
+        star.style.left =
+        x+"px";
+
+        star.style.top =
+        y+"px";
+
+        const angle =
+        Math.random()*360;
+
+        const distance =
+        20 + Math.random()*60;
+
+        const tx =
+        Math.cos(
+        angle*Math.PI/180
+        ) * distance + "px";
+
+        const ty =
+        Math.sin(
+        angle*Math.PI/180
+        ) * distance + "px";
+
+        star.style.setProperty(
+        "--tx",
+        tx
+        );
+
+        star.style.setProperty(
+        "--ty",
+        ty
+        );
+
+        document.body
+        .appendChild(star);
+
+        setTimeout(()=>{
+            star.remove();
+        },1500);
+    }
+}
+
+function createAura(x,y){
+
+    const aura =
+    document.createElement("div");
+
+    aura.style.position =
+    "absolute";
+
+    aura.style.left =
+    (x-30)+"px";
+
+    aura.style.top =
+    (y-30)+"px";
+
+    aura.style.width =
+    "60px";
+
+    aura.style.height =
+    "60px";
+
+    aura.style.borderRadius =
+    "50%";
+
+    aura.style.pointerEvents =
+    "none";
+
+    aura.style.background =
+    "radial-gradient(circle,#FFD700 0%,rgba(255,215,0,0) 70%)";
+
+    aura.style.filter =
+    "blur(10px)";
+
+    aura.style.opacity =
+    "0.8";
+
+    aura.style.animation =
+    "fadeAura 0.6s linear forwards";
+
+    document.body
+    .appendChild(aura);
+
+    setTimeout(()=>{
+        aura.remove();
+    },600);
+}
+
+function confetti(){
+
+    const colors=[
+        "#ff4da6",
+        "#00ffff",
+        "#ffff00",
+        "#00ff66",
+        "#ff6600"
+    ];
+
+    for(let i=0;i<200;i++){
+
+        const piece =
+        document.createElement("div");
+
+        piece.style.position =
+        "fixed";
+
+        piece.style.width =
+        "10px";
+
+        piece.style.height =
+        "10px";
+
+        piece.style.left =
+        Math.random()*100+"vw";
+
+        piece.style.top =
+        "-20px";
+
+        piece.style.background =
+        colors[
+        Math.floor(
+        Math.random()*colors.length
+        )];
+
+        piece.style.zIndex =
+        "9999";
+
+        document.body
+        .appendChild(piece);
+
+        piece.animate(
+        [
+            {
+                transform:
+                "translateY(0) rotate(0deg)"
+            },
+            {
+                transform:
+                "translateY(110vh) rotate(720deg)"
+            }
+        ],
+        {
+            duration:
+            3000 +
+            Math.random()*2000,
+            easing:"linear"
+        });
+    }
+}
+
+function reveal(x,y){
+
+    ctx.globalCompositeOperation =
+    "destination-out";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        65,
+        0,
+        Math.PI*2
+    );
+
+    ctx.fill();
+
+    sparkle(x,y);
+
+    createAura(x,y);
+
+    checkReveal();
+}
+
+function startDraw(){
+
+    drawing = true;
+
+    document
+    .getElementById("instruction")
+    .style.opacity = "0";
+}
+
+function endDraw(){
+
+    drawing = false;
+}
+
+function moveDraw(e){
+
+    if(!drawing) return;
+
+    const touch =
+    e.touches ?
+    e.touches[0] :
+    e;
+
+    reveal(
+        touch.clientX,
+        touch.clientY
+    );
+}
+
+canvas.addEventListener(
+"mousedown",
+startDraw
+);
+
+canvas.addEventListener(
+"mouseup",
+endDraw
+);
+
+canvas.addEventListener(
+"mousemove",
+moveDraw
+);
+
+canvas.addEventListener(
+"touchstart",
+startDraw
+);
+
+canvas.addEventListener(
+"touchend",
+endDraw
+);
+
+canvas.addEventListener(
+"touchmove",
+function(e){
+
+    e.preventDefault();
+
+    moveDraw(e);
+
+},
+{passive:false}
+);
+
+let completed = false;
+
+function checkReveal(){
+
+    if(completed) return;
+
+    const imageData =
+    ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    ).data;
+
+    let transparent = 0;
+
+    for(
+        let i=3;
+        i<imageData.length;
+        i+=40
+    ){
+
+        if(
+            imageData[i]===0
+        ){
+            transparent++;
+        }
+    }
+
+    const revealed =
+    transparent /
+    (imageData.length/40);
+
+    if(revealed > 0.35){
+
+        completed = true;
+
+        canvas.style.transition =
+        "1s";
+
+        canvas.style.opacity =
+        "0";
+
+        confetti();
+
+        setTimeout(()=>{
+
+            document
+            .getElementById("message")
+            .style.display =
+            "flex";
+
+        },1000);
+    }
+}
+
+</script>
+
+</body>
+</html>
