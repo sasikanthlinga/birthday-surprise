@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Puzzle</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    background:#111;
+    font-family:Arial,sans-serif;
+    text-align:center;
+    min-height:100vh;
+}
+
+h1{
+    color:white;
+    margin:15px 0;
+}
+
+.controls{
+    margin-bottom:15px;
+}
+
+button{
+    padding:10px 20px;
+    margin:5px;
+    border:none;
+    border-radius:8px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+#shuffleBtn{
+    background:#00bfff;
+    color:white;
+}
+
+#resetBtn{
+    background:#ff4da6;
+    color:white;
+}
+
+#board{
+    width:450px;
+    height:450px;
+    margin:20px auto;
+    position:relative;
+    border:4px solid white;
+}
+
+.slot{
+    position:absolute;
+    width:150px;
+    height:150px;
+    border:1px dashed rgba(255,255,255,.3);
+}
+
+.piece{
+    position:absolute;
+    width:150px;
+    height:150px;
+
+    background-image:url('photo1.jpeg');
+    background-size:450px 450px;
+
+    border:1px solid white;
+    box-shadow:0 0 10px rgba(255,255,255,.4);
+
+    cursor:grab;
+    touch-action:none;
+    z-index:100;
+}
+
+#message{
+    position:fixed;
+    inset:0;
+
+    background:rgba(0,0,0,.9);
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+
+    color:white;
+
+    z-index:9999;
+}
+
+#message h2{
+    font-size:60px;
+    color:#ff4da6;
+}
+
+#message p{
+    font-size:24px;
+    margin-top:15px;
+}
+</style>
+</head>
+<body>
+
+<h1>🧩 Complete The Puzzle</h1>
+
+<div class="controls">
+    <button id="shuffleBtn">🔀 Shuffle</button>
+    <button id="resetBtn">🔄 Reset</button>
+</div>
+
+<div id="board"></div>
+
+<div id="message">
+    <h2>❤️ Happy Birthday ❤️</h2>
+    <p>You completed the puzzle!</p>
+</div>
+
+<script>
+
+const board = document.getElementById("board");
+
+const correct = {};
+const pieces = [];
+
+let solved = 0;
+const size = 150;
+
+/* Create Slots and Pieces */
+
+for(let row=0; row<3; row++){
+
+    for(let col=0; col<3; col++){
+
+        const index = row*3 + col;
+
+        // SLOT
+
+        const slot = document.createElement("div");
+
+        slot.className = "slot";
+        slot.id = "s" + index;
+
+        slot.style.left = (col * size) + "px";
+        slot.style.top = (row * size) + "px";
+
+        board.appendChild(slot);
+
+        // PIECE
+
+        const piece = document.createElement("div");
+
+        piece.className = "piece";
+        piece.id = "p" + index;
+
+        piece.style.backgroundPosition =
+            `${-col*size}px ${-row*size}px`;
+
+        document.body.appendChild(piece);
+
+        pieces.push(piece);
+
+        correct[piece.id] = slot.id;
+
+        makeDraggable(piece);
+    }
+}
+
+/* Reset */
+
+function resetPieces(){
+
+    solved = 0;
+
+    document.getElementById("message").style.display = "none";
+
+    pieces.forEach((piece,index)=>{
+
+        piece.dataset.locked = "";
+
+        piece.style.pointerEvents = "auto";
+
+        piece.style.left =
+            (20 + (index % 5) * 160) + "px";
+
+        piece.style.top =
+            (550 + Math.floor(index / 5) * 170) + "px";
+
+    });
+}
+
+/* Shuffle */
+
+function shufflePieces(){
+
+    solved = 0;
+
+    document.getElementById("message").style.display = "none";
+
+    pieces.forEach(piece=>{
+
+        piece.dataset.locked = "";
+
+        piece.style.pointerEvents = "auto";
+
+        piece.style.left =
+            Math.random() * (window.innerWidth - 180) + "px";
+
+        piece.style.top =
+            (500 + Math.random() * 200) + "px";
+
+    });
+
+}
+
+/* Drag Logic */
+
+function makeDraggable(piece){
+
+    let offsetX = 0;
+    let offsetY = 0;
+
+    function start(e){
+
+        if(piece.dataset.locked === "yes") return;
+
+        const touch = e.touches ? e.touches[0] : e;
+
+        offsetX = touch.clientX - piece.offsetLeft;
+        offsetY = touch.clientY - piece.offsetTop;
+
+        document.addEventListener("mousemove", move);
+        document.addEventListener("mouseup", end);
+
+        document.addEventListener("touchmove", move,{passive:false});
+        document.addEventListener("touchend", end);
+    }
+
+    function move(e){
+
+        if(e.cancelable){
+            e.preventDefault();
+        }
+
+        const touch = e.touches ? e.touches[0] : e;
+
+        piece.style.left =
+            (touch.clientX - offsetX) + "px";
+
+        piece.style.top =
+            (touch.clientY - offsetY) + "px";
+    }
+
+    function end(){
+
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", end);
+
+        document.removeEventListener("touchmove", move);
+        document.removeEventListener("touchend", end);
+
+        snapPiece(piece);
+    }
+
+    piece.addEventListener("mousedown", start);
+    piece.addEventListener("touchstart", start);
+}
+
+/* Snap */
+
+function snapPiece(piece){
+
+    document.querySelectorAll(".slot").forEach(slot=>{
+
+        const pRect = piece.getBoundingClientRect();
+        const sRect = slot.getBoundingClientRect();
+
+        const dx = Math.abs(pRect.left - sRect.left);
+        const dy = Math.abs(pRect.top - sRect.top);
+
+        if(
+            dx < 40 &&
+            dy < 40 &&
+            correct[piece.id] === slot.id
+        ){
+
+            piece.style.left =
+                (board.offsetLeft + slot.offsetLeft) + "px";
+
+            piece.style.top =
+                (board.offsetTop + slot.offsetTop) + "px";
+
+            piece.dataset.locked = "yes";
+
+            piece.style.pointerEvents = "none";
+
+            if(!piece.dataset.scored){
+
+                piece.dataset.scored = "yes";
+
+                solved++;
+
+                if(solved === 9){
+
+                    document.getElementById("message")
+                            .style.display = "flex";
+                }
+            }
+        }
+
+    });
+
+}
+
+/* Buttons */
+
+document.getElementById("shuffleBtn")
+.addEventListener("click",()=>{
+
+    pieces.forEach(p=>{
+        p.dataset.scored="";
+    });
+
+    shufflePieces();
+});
+
+document.getElementById("resetBtn")
+.addEventListener("click",()=>{
+
+    pieces.forEach(p=>{
+        p.dataset.scored="";
+    });
+
+    resetPieces();
+});
+
+/* Initial Layout */
+
+resetPieces();
+
+</script>
+
+</body>
+</html>
