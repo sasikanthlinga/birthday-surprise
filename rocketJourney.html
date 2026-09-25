@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Memory Rocket Journey</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:#020617;
+    font-family:Arial,sans-serif;
+    touch-action:none;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+}
+
+#rocket{
+    position:absolute;
+    font-size:60px;
+    z-index:100;
+    left:50%;
+    top:80%;
+    transform:translate(-50%,-50%);
+}
+
+
+.star{
+
+    position:absolute;
+
+    width:2px;
+    height:2px;
+
+    background:white;
+
+    border-radius:50%;
+
+    animation:
+    twinkle 3s infinite;
+}
+
+.memory{
+
+    position:absolute;
+
+    width:90px;
+    height:90px;
+
+    display:flex;
+
+    justify-content:center;
+    align-items:center;
+
+    font-size:64px;
+
+    animation:
+    floatPlanet 3s ease-in-out infinite;
+
+    z-index:20;
+}
+
+.planet{
+
+    filter:
+        drop-shadow(0 0 8px gold)
+        drop-shadow(0 0 25px gold);
+
+    transition:all .4s ease;
+}
+
+@keyframes floatPlanet{
+
+    0%,100%{
+
+        transform:
+        translateY(0px);
+    }
+
+    50%{
+
+        transform:
+        translateY(-15px);
+    }
+}
+
+.memory img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+#counter{
+    position:absolute;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    color:gold;
+    font-size:24px;
+    z-index:999;
+}
+
+#popup{
+
+    position:fixed;
+
+    inset:0;
+
+    display:none;
+
+    justify-content:center;
+    align-items:center;
+
+    background:
+    rgba(0,0,0,.85);
+
+    z-index:3000;
+}
+
+#popup img{
+
+    width:min(90vw,500px);
+
+    border-radius:20px;
+
+    box-shadow:
+    0 0 20px white,
+    0 0 40px gold;
+
+    animation:
+    zoomPhoto .6s ease;
+}
+@keyframes twinkle{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+    }
+}
+
+@keyframes zoomPhoto{
+
+    from{
+
+        transform:scale(.5);
+
+        opacity:0;
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+    }
+}
+
+#win{
+    position:fixed;
+    inset:0;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    background:rgba(0,0,0,.9);
+    color:white;
+    text-align:center;
+    padding:25px;
+    z-index:5000;
+}
+
+#win h1{
+    color:gold;
+    margin-bottom:20px;
+}
+
+#win p{
+    max-width:600px;
+    line-height:1.7;
+}
+
+</style>
+</head>
+<body>
+
+<div id="game">
+
+    <div id="counter">
+        Collected 0 / 6
+    </div>
+
+    <div id="rocket">
+        🚀
+    </div>
+
+</div>
+
+<div id="popup">
+    <img id="popupImage">
+</div>
+
+<div id="win">
+
+    <h1>❤️ Happy Birthday ❤️</h1>
+
+    <p>
+        You collected all the beautiful memories!
+        Wishing you happiness, success, laughter,
+        and unforgettable moments.
+        🎂✨ Have an Amazing Birthday! ✨🎂
+    </p>
+
+</div>
+
+<script>
+
+
+const photos=[
+    "photo1.jpeg",
+    "photo2.jpeg",
+    "photo3.jpeg",
+    "photo4.jpeg",
+    "photo5.jpeg",
+    "photo6.jpeg"
+];
+
+const game=document.getElementById("game");
+const rocket=document.getElementById("rocket");
+const popup=document.getElementById("popup");
+const popupImage=document.getElementById("popupImage");
+const counter=document.getElementById("counter");
+for(let i=0;i<150;i++){
+
+    const star =
+    document.createElement("div");
+
+    star.className = "star";
+
+    star.style.left =
+    Math.random()*100+"vw";
+
+    star.style.top =
+    Math.random()*100+"vh";
+
+    game.appendChild(star);
+}
+
+let collected=0;
+
+let rocketX=window.innerWidth/2;
+let rocketY=window.innerHeight*0.8;
+
+const planetIcons = [
+    "🪐",
+    "🌍",
+    "🌎",
+    "🌏",
+    "🌕",
+    "☀️"
+];
+
+
+
+function createMemory(photo,index){
+
+    const planet =
+    document.createElement("div");
+
+    planet.className = "memory";
+
+    planet.dataset.photo = photo;
+
+    planet.innerHTML =
+    `<div class="planet">
+        ${planetIcons[index]}
+    </div>`;
+
+    planet.style.left =
+    (Math.random() *
+    (window.innerWidth - 100))
+    + "px";
+
+    planet.style.top =
+    (Math.random() *
+    (window.innerHeight - 200))
+    + "px";
+
+    game.appendChild(planet);
+}
+photos.forEach((photo,index)=>{
+    createMemory(photo,index);
+});
+
+function updateRocket(){
+
+    rocket.style.left=rocketX+"px";
+    rocket.style.top=rocketY+"px";
+
+    document
+    .querySelectorAll(".memory")
+    .forEach(memory=>{
+
+        const r=
+        rocket.getBoundingClientRect();
+
+        const m=
+        memory.getBoundingClientRect();
+
+        const hit=
+
+        r.left<m.right &&
+        r.right>m.left &&
+        r.top<m.bottom &&
+        r.bottom>m.top;
+
+        if(hit && !memory.dataset.collected){
+
+    memory.dataset.collected = "yes";
+	    memory.animate(
+[
+{
+transform:"scale(1)"
+},
+{
+transform:"scale(1.4)"
+},
+{
+transform:"scale(0)"
+}
+],
+{
+duration:500,
+easing:"ease-out"
+}
+);
+
+            popupImage.src=
+            memory.dataset.photo;
+
+            popup.style.display="flex";
+
+            memory.remove();
+
+            collected++;
+
+            counter.textContent =
+`Collected: ${collected} / ${photos.length}`;
+
+            setTimeout(()=>{
+
+                popup.style.display="none";
+
+            },1200);
+
+            if(collected===photos.length){
+
+                document
+                .getElementById("win")
+                .style.display="flex";
+            }
+        }
+    });
+
+    requestAnimationFrame(updateRocket);
+}
+
+document.addEventListener(
+"mousemove",
+e=>{
+
+    rocketX=e.clientX-25;
+    rocketY=e.clientY-25;
+
+}
+);
+
+document.addEventListener(
+"touchmove",
+e=>{
+
+    rocketX=
+    e.touches[0].clientX-25;
+
+    rocketY=
+    e.touches[0].clientY-25;
+
+},
+{passive:true}
+);
+
+updateRocket();
+
+</script>
+
+</body>
+</html>
