@@ -36,6 +36,52 @@ body{
     max-width:1200px;
     margin:auto;
 }
+.neon{
+ 
+color:#00ffff;
+ 
+text-shadow:
+0 0 5px #00ffff,
+0 0 10px #00ffff,
+0 0 20px #00ffff,
+0 0 40px #00ffff;
+ 
+font-size:50px;
+}
+.btn{
+
+    padding:20px;
+
+    border:none;
+
+    border-radius:15px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    color:white;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.btn:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 10px 25px rgba(255,255,255,.2);
+}
+
+.b1{background:#ef4444;}
+.b2{background:#f59e0b;}
+.b3{background:#10b981;}
+.b4{background:#3b82f6;}
+.b5{background:#8b5cf6;}
+.b6{background:#ec4899;}
+
 
 h1{
     color:white;
@@ -161,6 +207,7 @@ h1{
 
     overflow:visible;
 }
+
 
 .gift-ribbon{
 
@@ -547,7 +594,37 @@ h1{
 
     </div>
 
-    <button
+    
+<body>
+
+<div class="container">
+<br><br>
+<div class="message-box">
+
+<h2 class="neon">
+You like Games right!! Do you want to play some games? 
+</h2>
+
+</div>
+
+
+    <button class="btn b1" onclick="window.location.href='scratch_card.html'">🎫 Scratch Card Reveal 🪙</button>
+
+    <button class="btn b2" onclick="window.location.href='shuffle_puzzle.html'">🧩 Puzzle Challenge 🧩</button>
+
+    <button class="btn b3" onclick="window.location.href='shufflePuzzle2.html'">🧩 Puzzle Challenge 2 🧩</button>
+
+    <button class="btn b4" onclick="window.location.href='goldDustReveal.html'">✨ Gold Dust</button>
+
+    <button class="btn b5" onclick="window.location.href='fireworks.html'">🎆 Fire Works</button>
+
+    <button class="btn b5" onclick="window.location.href='memoryCards.html'">🧠 Memory Challenge</button>
+
+    <button class="btn b6" onclick="window.location.href='rocketJourney.html'">🚀 Rocket Journey</button>
+
+</div>
+
+<button
         class="btn"
         onclick="window.location.href='index.html'">
 
@@ -556,6 +633,8 @@ h1{
     </button>
 
 </div>
+
+</body>
 
 <script>
 
