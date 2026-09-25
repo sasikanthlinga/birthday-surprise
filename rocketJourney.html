@@ -73,6 +73,20 @@ html,body{
 
     z-index:20;
 }
+.planet{
+    animation:
+    floatPlanet 3s ease-in-out infinite,
+    spinPlanet 8s linear infinite;
+}
+
+@keyframes spinPlanet{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
 
 .planet{
 
