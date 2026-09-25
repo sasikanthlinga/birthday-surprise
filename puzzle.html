@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puzzle Assembly Animation</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+   *box-sizing:border-box;
+}
+
+body{
+  * overflow:hidden;
+    background:#*11;
+    font-family:Arial,sans-ser*f;
+}
+
+#stage{
+    width:100vw;
+   *height:100vh;
+    position:relativ*;
+    overflow:hidden;
+}
+
+.piece{
+*   position:absolute;
+    width:18*px;
+    height:120px;
+    backgrou*d-size:cover;
+    background-posit*on:center;
+    border:3px solid wh*te;
+    border-radius:12px;
+    tr*nsition:
+        left 2s ease,
+   *    top 2s ease,
+        transform*2s ease,
+        opacity 2s ease;
+*   box-shadow:0 0 20px rgba(255,25*,255,.4);
+}
+
+#message{
+    positio*:absolute;
+    inset:0;
+    displa*:flex;
+    justify-content:center;*    align-items:center;
+    flex-d*rection:column;
+    background:rgb*(0,0,0,.85);
+    color:white;
+    *pacity:0;
+    pointer-events:none;*    transition:1.5s;
+}
+
+#message.s*ow{
+    opacity:1;
+}
+
+#message h1{*    font-size:72px;
+    color:#ff4*a6;
+    text-shadow:
+        0 0 1*px white,
+        0 0 30px #ff4da6*
+}
+
+#message p{
+    margin-top:15p*;
+    font-size:28px;
+}
+
+.star{
+  * position:absolute;
+    background*white;
+    border-radius:50%;
+    *pacity:.7;
+    animation:twinkle 3* infinite;
+}
+
+@keyframes twinkle{
+*   0%,100%{opacity:.2;}
+    50%{op*city:1;}
+}
+
+.confetti{
+    positio*:absolute;
+   *width*10px;
+    height:10px;
+*  *border-radius:50%;
+}
+
+*/style>
+</head>
+<body>
+
+<div id="s*age">
+    <div id="message">
+        <h1>❤️ Happy Birthday ❤️</h1>
+        <p>Wishing You a Wonderful Year Ahead!</p>
+    </div>
+</div>
+
+<script>
+
+const images = [
+"photo1.jpeg",
+"photo2.jpeg",
+"photo3.jpeg",
+"photo4.jpeg",
+"photo5.jpeg",
+"photo6.jpeg",
+"photo7.jpeg",
+"photo8.jpeg",
+"photo9.jpeg",
+"photo10.jpeg",
+"photo11.jpeg",
+"photo12.jpeg",
+"photo13.jpeg",
+"photo14.jpeg",
+"photo15.jpeg",
+"photo16.jpeg",
+"photo17.jpeg"
+];
+
+const stage = document.getElementById("stage");
+
+for(let i=0;i<120;i++){
+
+    const star=document.createElement("div");
+
+    star.className="star";
+
+    let size=Math.random()*3+1;
+
+    star.style.width=size+"px";
+    star.style.height=size+"px";
+
+    star.style.left=Math.random()*100+"vw";
+    star.style.top=Math.random()*100+"vh";
+
+    stage.appendChild(star);
+}
+
+const pieces=[];
+
+/* final puzzle positions */
+
+const grid = [
+{x:80,y:80},
+{x:280,y:80},
+{x:480,y:80},
+{x:680,y:80},
+
+{x:80,y:220},
+{x:280,y:220},
+{x:480,y:220},
+{x:680,y:220},
+
+{x:80,y:360},
+{x:280,y:360},
+{x:480,y:360},
+{x:680,y:360},
+
+{x:180,y:500},
+{x:380,y:500},
+{x:580,y:500},
+
+{x:280,y:640},
+{x:480,y:640}
+];
+
+images.forEach((img,index)=>{
+
+    const piece=document.createElement("div");
+
+    piece.className="piece";
+
+    piece.style.backgroundImage=`url('${img}')`;
+
+    piece.style.left=Math.random()*window.innerWidth+"px";
+    piece.style.top=Math.random()*window.innerHeight+"px";
+
+    piece.style.transform=
+        `rotate(${Math.random()*360}deg)`;
+
+    stage.appendChild(piece);
+
+    pieces.push(piece);
+
+});
+
+function assemblePuzzle(){
+
+    pieces.forEach((piece,index)=>{
+
+        piece.style.left=grid[index].x+"px";
+        piece.style.top=grid[index].y+"px";
+        piece.style.transform="rotate(0deg)";
+
+    });
+
+}
+
+function explodePuzzle(){
+
+    pieces.forEach(piece=>{
+
+        const angle=Math.random()*360;
+        const distance=800;
+
+        const x=Math.cos(angle*Math.PI/180)*distance;
+        const y=Math.sin(angle*Math.PI/180)*distance;
+
+        piece.style.left=
+            (parseFloat(piece.style.left)+x)+"px";
+
+        piece.style.top=
+            (parseFloat(piece.style.top)+y)+"px";
+
+        piece.style.opacity="0";
+
+    });
+
+}
+
+function confetti(){
+
+    const colors=[
+        "#ff4da6",
+        "#00ffff",
+        "#ffff00",
+        "#00ff66",
+        "#ff6600"
+    ];
+
+    for(let i=0;i<250;i++){
+
+        const c=document.createElement("div");
+
+        c.className="confetti";
+
+        c.style.background=
+            colors[Math.floor(Math.random()*colors.length)];
+
+        c.style.left=Math.random()*100+"vw";
+
+        c.style.top="-20px";
+
+        stage.appendChild(c);
+
+        c.animate([
+        {
+            transform:"translateY(0px) rotate(0deg)",
+            opacity:1
+        },
+        {
+            transform:`translateY(${window.innerHeight+100}px) rotate(720deg)`,
+            opacity:0
+        }
+        ],
+        {
+            duration:3000+Math.random()*3000,
+            easing:"linear"
+        });
+
+    }
+
+}
+
+setTimeout(()=>{
+
+    assemblePuzzle();
+
+},1000);
+
+setTimeout(()=>{
+
+    explodePuzzle();
+
+    confetti();
+
+},7000);
+
+setTimeout(()=>{
+
+    document
+        .getElementById("message")
+        .classList.add("show");
+
+},8500);
+
+</script>
+
+</body>
+</html>
