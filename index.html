@@ -204,6 +204,33 @@ h1{
     transform:scale(1.05);
 }
 
+.reveal{
+
+    opacity:0;
+
+    transition:1s ease;
+}
+
+.reveal.show{
+
+    opacity:1;
+}
+
+#birthdayTitle::after,
+#birthdayMessage::after{
+
+    content:"|";
+
+    animation:blinkCursor .8s infinite;
+}
+
+@keyframes blinkCursor{
+
+    50%{
+        opacity:0;
+    }
+}
+
 /* Mobile */
 
 @media(max-width:768px){
@@ -239,28 +266,23 @@ h1{
 
 <div class="container">
 
-    <h1>🎉 Happy Birthday Nainee 🎂</h1>
+    <h1 id="birthdayTitle"></h1>
 
     <div class="message-box">
 
-        <p class="message">
-            Wishing you a wonderful birthday filled with happiness,
-            laughter, love, and unforgettable memories. 💖
-            May all your dreams come true and your life be filled
-            with success, joy, and beautiful moments. ✨
-        </p>
+        <p class="message" id="birthdayMessage"></p>
 
     </div>
 
-    <div class="memories-title">
+    <div class="memories-title reveal">
         ✨ A Few Beautiful Memories ✨
     </div>
 
-    <p style="color:white; margin-top:10px;">
+    <p class="reveal" style="color:white; margin-top:10px;">
         💖 Tap Any Photo For A Surprise 💖
     </p>
 
-    <div class="gallery">
+    <div class="gallery reveal">
 
         <img class="birthday-photo"
              src="photo16.jpeg"
@@ -281,8 +303,8 @@ h1{
     </div>
 
     <button
-        class="btn"
-        onclick="window.location.href='treats.html'">
+        <button class="btn reveal"
+        onclick="window.location.href='treats2.html'">
 
         Click for a Special Wish 🎁
 
@@ -291,7 +313,90 @@ h1{
 </div>
 
 <script>
+const titleText =
+"🎉 Happy Birthday Nainee 🎂";
 
+const messageText =
+"Wishing you a wonderful birthday filled with happiness, laughter, love, and unforgettable memories. 💖 May all your dreams come true and your life be filled with success, joy, and beautiful moments. ✨";
+
+const title =
+document.getElementById(
+"birthdayTitle"
+);
+
+const message =
+document.getElementById(
+"birthdayMessage"
+);
+
+let titleIndex = 0;
+
+function typeTitle(){
+
+    if(titleIndex < titleText.length){
+
+        title.innerHTML +=
+        titleText.charAt(titleIndex);
+
+        titleIndex++;
+
+        setTimeout(
+            typeTitle,
+            80
+        );
+
+    }else{
+
+        setTimeout(
+            typeMessage,
+            400
+        );
+    }
+}
+
+let messageIndex = 0;
+
+function typeMessage(){
+
+    if(
+        messageIndex <
+        messageText.length
+    ){
+
+        message.innerHTML +=
+        messageText.charAt(
+            messageIndex
+        );
+
+        messageIndex++;
+
+        setTimeout(
+            typeMessage,
+            25
+        );
+
+    }else{
+
+        revealContent();
+    }
+}
+
+function revealContent(){
+
+    document
+    .querySelectorAll(".reveal")
+    .forEach((item,index)=>{
+
+        setTimeout(()=>{
+
+            item.classList.add(
+                "show"
+            );
+
+        }, index * 400);
+
+    });
+}
 const items = [
     "💖",
     "❤️",
@@ -370,6 +475,7 @@ function burst(e){
         },1200);
     }
 }
+typeTitle();
 
 </script>
 
