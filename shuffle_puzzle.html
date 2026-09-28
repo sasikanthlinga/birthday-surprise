@@ -17,6 +17,7 @@ body{
     font-family:Arial,sans-serif;
     text-align:center;
     min-height:100vh;
+    overflow-x:hidden;
 }
 
 h1{
@@ -80,20 +81,117 @@ button{
 
 #message{
     position:fixed;
-    inset:0;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%) scale(0);
 
-    background:rgba(0,0,0,.9);
+    width:90%;
+    max-width:700px;
 
-    display:none;
+    background:rgba(0,0,0,.92);
+    border:3px solid #ff4da6;
+    border-radius:25px;
 
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-
+    padding:30px;
+    text-align:center;
     color:white;
+
+    opacity:0;
+    visibility:hidden;
 
     z-index:9999;
 }
+#message{
+    overflow:visible;
+}
+
+#message::before{
+    pointer-events:none;
+}
+
+
+#message.show{
+    opacity:1;
+    visibility:visible;
+    animation:popExplosion .8s ease forwards;
+box-shadow:
+    0 0 25px #ff4da6,
+    0 0 50px #ff00ff,
+    0 0 80px #FFD700;
+}
+
+@keyframes popExplosion{
+    0%{
+        transform:translate(-50%,-50%) scale(0);
+    }
+
+    60%{
+        transform:translate(-50%,-50%) scale(1.15);
+    }
+
+    100%{
+        transform:translate(-50%,-50%) scale(1);
+    }
+}
+
+#message{
+    overflow:visible;
+}
+
+#message.show::after{
+    content:"🎉 ✨ 🎊 💖 ⭐ 🎆";
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    font-size:50px;
+    white-space:nowrap;
+
+    transform:translate(-50%,-50%) scale(0);
+
+    animation:explode 1s ease-out;
+
+    pointer-events:none;
+}
+
+@keyframes explode{
+
+    0%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(0);
+    }
+
+    70%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(2.5);
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(4);
+    }
+
+}
+
+@keyframes explode{
+    0%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(0);
+    }
+
+    70%{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(2.5);
+    }
+
+    100%{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(4);
+    }
+}
+
+
 
 #message h2{
     font-size:60px;
@@ -103,6 +201,119 @@ button{
 #message p{
     font-size:24px;
     margin-top:15px;
+}
+#gamesSection{
+
+    margin-top:80px;
+
+    padding:60px 20px;
+
+    background:#0f172a;
+}
+
+#gamesSection h2{
+
+    color:#FFD700;
+
+    margin-bottom:30px;
+
+    font-size:32px;
+}
+
+.games-grid{
+
+    display:grid;
+
+    gap:15px;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+
+    max-width:900px;
+
+    margin:auto;
+}
+
+.games-grid button{
+
+    padding:18px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #ff4da6,
+        #7c3aed
+    );
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.games-grid button:hover{
+
+    transform:
+    translateY(-5px);
+
+    box-shadow:
+    0 0 20px #ff4da6;
+}
+.games-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(180px,1fr));
+
+    gap:15px;
+
+    max-width:800px;
+
+    margin:30px auto;
+}
+
+.games-grid button{
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:15px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    background:
+    linear-gradient(
+        135deg,
+        #ff4da6,
+        #7c3aed
+    );
+
+    transition:.3s;
+}
+
+.games-grid button:hover{
+
+    transform:translateY(-5px);
+
+    box-shadow:
+    0 0 20px #ff4da6;
 }
 </style>
 </head>
@@ -119,8 +330,45 @@ button{
 
 <div id="message">
     <h2>❤️ Happy Birthday ❤️</h2>
-    <p>You completed the puzzle!</p>
+
+    <p>
+        You completed the puzzle!
+        Wishing you happiness, success,
+        laughter and beautiful memories.
+    </p>
 </div>
+
+<section id="gamesSection" style="display:none;">
+    <h2>🎮 Birthday Games</h2>
+
+    <div class="games-grid">
+
+        <button onclick="location.href='goldDustReveal.html'">
+            ✨ Gold Dust
+        </button>
+
+        <button onclick="location.href='rocketJourney.html'">
+            🚀 Rocket Journey
+        </button>
+
+        <button onclick="location.href='memoryCards.html'">
+            🃏 Memory Cards
+        </button>
+
+        <button onclick="location.href='scratch_card.html'">
+            🎫 Scratch Card
+        </button>
+
+        <button onclick="location.href='fireworks.html'">
+            🎆 Fireworks
+        </button>
+
+        <button onclick="location.href='shufflePuzzle2.html'">
+            ❤️ One more Puzzle
+        </button>
+
+    </div>
+</section>
 
 <script>
 
@@ -178,7 +426,8 @@ function resetPieces(){
 
     solved = 0;
 
-    document.getElementById("message").style.display = "none";
+document.getElementById("message").classList.remove("show");
+document.getElementById("gamesSection").style.display = "none";
 
     pieces.forEach((piece,index)=>{
 
@@ -201,7 +450,11 @@ function shufflePieces(){
 
     solved = 0;
 
-    document.getElementById("message").style.display = "none";
+    document.getElementById("message")
+        .classList.remove("show");
+
+document.getElementById("gamesSection")
+        .style.display = "none";
 
     pieces.forEach(piece=>{
 
@@ -306,11 +559,33 @@ function snapPiece(piece){
 
                 solved++;
 
-                if(solved === 9){
+               if(solved === 9){
 
-                    document.getElementById("message")
-                            .style.display = "flex";
-                }
+    const msg =
+        document.getElementById("message");
+
+    const games =
+        document.getElementById("gamesSection");
+
+    msg.classList.add("show");
+
+    games.style.display = "block";
+
+    setTimeout(() => {
+
+    msg.classList.remove("show");
+
+},4000);
+
+setTimeout(() => {
+
+    document.getElementById("gamesSection")
+            .scrollIntoView({
+                behavior:"smooth"
+            });
+
+},4200);
+}
             }
         }
 
