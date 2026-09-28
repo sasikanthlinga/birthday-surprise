@@ -1,10 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Scratch Reveal</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scratch Reveal Birthday</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -13,48 +15,203 @@
 
 body{
     background:#111;
-    height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
     font-family:Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+    color:white;
+    overflow-x:hidden;
 }
+
+/* ===== SCRATCH CARD ===== */
 
 .card{
     position:relative;
-    width:350px;
-    height:500px;
+    width:95vw;
+    max-width:450px;
+    height:650px;
     overflow:hidden;
     border-radius:20px;
-    box-shadow:0 0 30px rgba(255,255,255,.3);
-}
-.card img{
-width:100%;
-height:100%;
-object-fit:cover;
-display:block;
+    box-shadow:0 0 25px rgba(255,255,255,.3);
 }
 
-
-canvas{
+.card img,
+.card canvas{
     position:absolute;
     inset:0;
+    width:100%;
+    height:100%;
+}
+
+.card img{
+    object-fit:cover;
+}
+
+canvas{
+    z-index:2;
     touch-action:none;
 }
 
 .message{
     position:absolute;
     bottom:15px;
-    left:0;
     width:100%;
     text-align:center;
-    color:white;
     font-size:24px;
+    font-weight:bold;
     text-shadow:0 0 10px black;
+    z-index:3;
 }
+
+/* ===== WISH CARD ===== */
+
+.wishCard{
+
+    display:none;
+
+    width:95vw;
+    max-width:450px;
+
+    margin-top:20px;
+    padding:25px;
+
+    border-radius:20px;
+
+    text-align:center;
+
+    background:linear-gradient(
+        135deg,
+        #ff4d4d,
+        #ff1493,
+        #8a2be2
+    );
+
+    color:white;
+
+    box-shadow:
+    0 0 20px rgba(255,255,255,.4);
+
+    animation:popUp 0.8s ease;
+}
+
+.wishCard.show{
+    display:block;
+}
+
+.wishCard h1{
+    margin-bottom:15px;
+}
+
+.wishCard p{
+    line-height:1.8;
+}
+
+@keyframes popUp{
+    from{
+        opacity:0;
+        transform:scale(.3);
+    }
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+/* ===== DIVIDER ===== */
+
+.divider{
+    width:90%;
+    height:2px;
+    margin:30px 0;
+    background:#00ffff;
+    box-shadow:
+    0 0 10px #00ffff,
+    0 0 20px #00ffff;
+}
+
+/* ===== BUTTONS ===== */
+
+.container{
+    width:100%;
+    max-width:1200px;
+    text-align:center;
+}
+
+.neon{
+    color:#00ffff;
+
+    text-shadow:
+    0 0 5px #00ffff,
+    0 0 10px #00ffff,
+    0 0 20px #00ffff,
+    0 0 40px #00ffff;
+
+    margin-bottom:25px;
+}
+
+.buttons{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:15px;
+}
+
+.btn{
+    border:none;
+    color:white;
+    padding:18px 25px;
+    border-radius:15px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+}
+
+.b2{background:#f59e0b;}
+.b3{background:#10b981;}
+.b4{background:#3b82f6;}
+.b5{background:#8b5cf6;}
+.b6{background:#ec4899;}
+.backBtn{background:#ff0066;}
+
+.confetti{
+    position:fixed;
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+}
+
+@media(max-width:768px){
+
+    .card{
+        height:550px;
+    }
+
+    .buttons{
+        flex-direction:column;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .wishCard h1{
+        font-size:1.8rem;
+    }
+}
+
 </style>
 </head>
 <body>
+
+<!-- SCRATCH CARD -->
 
 <div class="card">
 
@@ -63,48 +220,260 @@ canvas{
     <canvas id="scratch"></canvas>
 
     <div class="message">
-        Scratch Here ✨
+        ✨ Scratch Here ✨
     </div>
+
+</div>
+
+<!-- BIRTHDAY WISH -->
+
+<div id="wishPopup" class="wishCard">
+
+    <h1>🎉 HAPPY BIRTHDAY 🎂</h1>
+
+    <p>
+        🌟 Wishing you endless happiness,
+        joy and success! 🌟
+        <br><br>
+        🎁 May all your dreams come true!
+        <br><br>
+        🥳 Have an amazing year ahead! 💖
+    </p>
+
+</div>
+
+<div class="divider"></div>
+
+<!-- BUTTONS -->
+
+<div class="container">
+
+    <h2 class="neon">
+        Remaining Games Are Here 👇
+    </h2>
+
+    <div class="buttons">
+
+        <button class="btn b2"
+        onclick="window.location.href='shuffle_puzzle.html'">
+            🧩 Puzzle Challenge
+        </button>
+
+        <button class="btn b3"
+        onclick="window.location.href='shufflePuzzle2.html'">
+            🧩 Puzzle Challenge 2
+        </button>
+
+        <button class="btn b4"
+        onclick="window.location.href='goldDustReveal.html'">
+            ✨ Gold Dust
+        </button>
+
+        <button class="btn b5"
+        onclick="window.location.href='fireworks.html'">
+            🎆 Fire Works
+        </button>
+
+        <button class="btn b5"
+        onclick="window.location.href='memoryCards.html'">
+            🧠 Memory Challenge
+        </button>
+
+        <button class="btn b6"
+        onclick="window.location.href='rocketJourney.html'">
+            🚀 Rocket Journey
+        </button>
+
+    </div>
+
+    <br>
+
+    <button
+        class="btn backBtn"
+        onclick="window.location.href='wishes_4.html'">
+        ⬅ Back To Wishes
+    </button>
 
 </div>
 
 <script>
 
-const canvas = document.getElementById('scratch');
-const ctx = canvas.getContext('2d');
-
-canvas.width = 350;
-canvas.height = 500;
-
-ctx.fillStyle = '#C0C0C0';
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle = '#888';
-ctx.font = 'bold 40px Arial';
-ctx.textAlign = 'center';
-ctx.fillText('SCRATCH',canvas.width/2,250);
+const canvas = document.getElementById("scratch");
+const ctx = canvas.getContext("2d");
+const card = document.querySelector(".card");
 
 let drawing = false;
+let celebrationDone = false;
 
-function scratch(x,y){
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath();
-    ctx.arc(x,y,30,0,Math.PI*2);
-    ctx.fill();
+function setupCanvas(){
+
+    canvas.width = card.clientWidth;
+    canvas.height = card.clientHeight;
+
+    const gradient = ctx.createLinearGradient(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
+
+    gradient.addColorStop(0,"#dddddd");
+    gradient.addColorStop(1,"#888888");
+
+    ctx.globalCompositeOperation = "source-over";
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    ctx.fillStyle = "#555";
+    ctx.font = "bold 40px Arial";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.fillText(
+        "SCRATCH ME",
+        canvas.width/2,
+        canvas.height/2
+    );
 }
 
-canvas.addEventListener('mousedown',()=>{
+setupCanvas();
+
+function scratch(x,y){
+
+    ctx.globalCompositeOperation =
+    "destination-out";
+
+    ctx.beginPath();
+    ctx.arc(x,y,40,0,Math.PI*2);
+    ctx.fill();
+
+    checkReveal();
+}
+
+function checkReveal(){
+
+    if(celebrationDone) return;
+
+    const pixels =
+    ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    ).data;
+
+    let transparent = 0;
+
+    for(let i=3;i<pixels.length;i+=4){
+
+        if(pixels[i] === 0){
+            transparent++;
+        }
+    }
+
+    const percent =
+    transparent /
+    (canvas.width * canvas.height);
+
+    if(percent >= 0.5){
+
+        celebrationDone = true;
+
+        canvas.style.opacity = "0";
+        canvas.style.pointerEvents = "none";
+
+        document
+        .querySelector(".message")
+        .style.display = "none";
+
+        document
+        .getElementById("wishPopup")
+        .classList.add("show");
+
+        createConfetti();
+    }
+}
+
+function createConfetti(){
+
+    const colors = [
+        "#ff0000",
+        "#00ff00",
+        "#ffff00",
+        "#00ffff",
+        "#ff00ff",
+        "#ff8800"
+    ];
+
+    for(let i=0;i<200;i++){
+
+        let conf =
+        document.createElement("div");
+
+        conf.className =
+        "confetti";
+
+        conf.style.background =
+        colors[
+            Math.floor(
+            Math.random()*colors.length
+            )
+        ];
+
+        conf.style.left =
+        Math.random()*100 + "vw";
+
+        conf.style.top = "-20px";
+
+        document.body.appendChild(conf);
+
+        let duration =
+        3000 + Math.random()*2000;
+
+        conf.animate(
+        [
+            {transform:"translateY(0)"},
+            {
+                transform:
+                `translate(
+                ${(Math.random()-0.5)*300}px,
+                110vh
+                )
+                rotate(
+                ${Math.random()*720}deg
+                )`
+            }
+        ],
+        {
+            duration:duration,
+            easing:"linear"
+        });
+
+        setTimeout(()=>{
+            conf.remove();
+        },duration);
+    }
+}
+
+/* Desktop */
+
+canvas.addEventListener("mousedown",()=>{
     drawing=true;
 });
 
-canvas.addEventListener('mouseup',()=>{
+canvas.addEventListener("mouseup",()=>{
     drawing=false;
 });
 
-canvas.addEventListener('mousemove',(e)=>{
+canvas.addEventListener("mouseleave",()=>{
+    drawing=false;
+});
+
+canvas.addEventListener("mousemove",(e)=>{
+
     if(!drawing) return;
 
-    const rect=canvas.getBoundingClientRect();
+    const rect =
+    canvas.getBoundingClientRect();
 
     scratch(
         e.clientX-rect.left,
@@ -112,21 +481,24 @@ canvas.addEventListener('mousemove',(e)=>{
     );
 });
 
-canvas.addEventListener('touchstart',()=>{
+/* Mobile */
+
+canvas.addEventListener("touchstart",()=>{
     drawing=true;
 });
 
-canvas.addEventListener('touchend',()=>{
+canvas.addEventListener("touchend",()=>{
     drawing=false;
 });
 
-canvas.addEventListener('touchmove',(e)=>{
+canvas.addEventListener("touchmove",(e)=>{
 
     e.preventDefault();
 
     if(!drawing) return;
 
-    const rect=canvas.getBoundingClientRect();
+    const rect =
+    canvas.getBoundingClientRect();
 
     scratch(
         e.touches[0].clientX-rect.left,
@@ -134,6 +506,8 @@ canvas.addEventListener('touchmove',(e)=>{
     );
 
 },{passive:false});
+
+window.addEventListener("resize",setupCanvas);
 
 </script>
 
