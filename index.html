@@ -317,8 +317,7 @@ const titleText =
 "🎉 Happy Birthday Nainee 🎂";
 
 const messageText =
-"Wishing you a wonderful birthday filled with happiness, laughter, love, and unforgettable memories. 💖 May all your dreams come true and your life be filled with success, joy, and beautiful moments. ✨";
-
+"I hope you are doing well!! This little surprise is just to bring a smile to your face.<br><br>Wishing you a wonderful birthday filled with happiness, laughter, love, and unforgettable memories. 💖 May all your dreams come true and your life be filled with success, joy, and beautiful moments. ✨";
 const title =
 document.getElementById(
 "birthdayTitle"
@@ -356,17 +355,11 @@ function typeTitle(){
 
 let messageIndex = 0;
 
-function typeMessage(){
+function typeMessage() {
+    if (messageIndex < messageText.length) {
 
-    if(
-        messageIndex <
-        messageText.length
-    ){
-
-        message.innerHTML +=
-        messageText.charAt(
-            messageIndex
-        );
+        message.innerHTML =
+            messageText.substring(0, messageIndex + 1);
 
         messageIndex++;
 
@@ -375,9 +368,10 @@ function typeMessage(){
             25
         );
 
-    }else{
+    } else {
 
         revealContent();
+
     }
 }
 
