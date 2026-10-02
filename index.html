@@ -274,7 +274,27 @@ h1{
 
     </div>
 
+<div class="life-timer reveal">
+    <h2 style="color:white; margin-top:30px;">
+        ⏳ Time spent, Since you stepped on this Earth
+    </h2>
+
+    <div id="earthTimer"
+         style="
+         color:white;
+         font-size:1.3rem;
+         margin-top:15px;
+         background:rgba(0,0,0,0.25);
+         padding:20px;
+         border-radius:20px;">
+    </div>
+</div>
+
+
     <div class="memories-title reveal">
+So far, you've completed this amazing journey on Earth. 🌍 And trust me, there are still so many wonderful days, adventures, and achievements waiting for you. 💫.
+<br><br>
+ 
         ✨ A Few Beautiful Memories ✨
     </div>
 
@@ -327,6 +347,34 @@ const message =
 document.getElementById(
 "birthdayMessage"
 );
+
+function updateEarthTimer() {
+
+    // YYYY-MM-DDTHH:MM:SS
+    const birthDate = new Date("2006-10-03T08:30:00");
+
+    const now = new Date();
+
+    let diff = now.getTime() - birthDate.getTime();
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    diff %= (1000 * 60 * 60 * 24);
+
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    diff %= (1000 * 60 * 60);
+
+    const minutes = Math.floor(diff / (1000 * 60));
+    diff %= (1000 * 60);
+
+    const seconds = Math.floor(diff / 1000);
+
+    document.getElementById("earthTimer").innerHTML =
+        `🌍 ${days.toLocaleString()} Days<br>
+         ⏰ ${hours} Hours ${minutes} Minutes ${seconds} Seconds`;
+}
+
+updateEarthTimer();
+setInterval(updateEarthTimer, 1000);
 
 let titleIndex = 0;
 
