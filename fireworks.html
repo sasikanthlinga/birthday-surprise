@@ -49,17 +49,17 @@ body{
 }
 
 #photo{
-
     position:absolute;
-
     inset:0;
-
     opacity:0;
-
-    transition:1s;
-
+    transition:opacity 1s;
     background-size:cover;
+    background-repeat:no-repeat;
     background-position:center;
+    z-index:50;
+filter:
+drop-shadow(0 0 20px white)
+drop-shadow(0 0 40px #ff4da6);
 }
 
 #tapText{
@@ -82,25 +82,20 @@ body{
 }
 
 .rocket{
-
     position:absolute;
-
     width:4px;
     height:40px;
-
     background:white;
-
     border-radius:10px;
+    z-index:100;
 }
 
 .particle{
-
     position:absolute;
-
     width:8px;
     height:8px;
-
     border-radius:50%;
+    z-index:100;
 }
 
 #message{
@@ -147,6 +142,53 @@ body{
     font-size:24px;
 
     line-height:1.6;
+}
+#closeBtn{
+    margin-top:30px;
+    padding:15px 35px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(
+        135deg,
+        #ff4da6,
+        #ff0080
+    );
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:
+        0 0 15px rgba(255,77,166,0.7),
+        0 0 40px rgba(255,0,128,0.5);
+    transition:all 0.3s ease;
+    animation:pulse 2s infinite;
+}
+
+#closeBtn:hover{
+    transform:translateY(-4px) scale(1.05);
+    box-shadow:
+        0 0 25px rgba(255,77,166,1),
+        0 0 60px rgba(255,0,128,0.8);
+}
+
+#closeBtn:active{
+    transform:scale(0.95);
+}
+
+@keyframes pulse{
+    0%{
+        box-shadow:
+            0 0 15px rgba(255,77,166,0.7);
+    }
+    50%{
+        box-shadow:
+            0 0 35px rgba(255,77,166,1),
+            0 0 60px rgba(255,0,128,0.8);
+    }
+    100%{
+        box-shadow:
+            0 0 15px rgba(255,77,166,0.7);
+    }
 }
 
 @media(max-width:768px){
@@ -198,6 +240,9 @@ and endless joy.
 🎂 Have An Amazing Birthday! 🎂
 
 </p>
+<button id="closeBtn" class="b1" onclick="window.location.href='treats.html'">
+    🎁 Open Birthday Treats 🎁
+</button>
 
 </div>
 
@@ -205,15 +250,18 @@ and endless joy.
 
 const photos=[
 
-"photo7.jpeg",
+"photo19.jpeg",
 "photo2.jpeg",
 "photo3.jpeg",
 "photo4.jpeg",
-"photo5.jpeg"
+"photo5.jpeg",
+"photo10.jpeg"
 
 ];
 
-let currentPhoto=0;
+let currentPhoto = 0;
+let isShowingPhoto = false;
+let finaleShown = false;
 
 const sky=
 document.getElementById("sky");
@@ -374,22 +422,50 @@ function explode(x,y){
 
 function revealPhoto(){
 
+    if(isShowingPhoto) return;
+
     if(currentPhoto < photos.length){
 
-        photoDiv.style.backgroundImage=
-        `url('${photos[currentPhoto]}')`;
+        isShowingPhoto = true;
 
-        photoDiv.style.opacity="1";
+        const img = new Image();
+
+img.onload = () => {
+
+    photoDiv.style.backgroundImage =
+    `url('${photos[currentPhoto]}')`;
+
+    photoDiv.style.opacity = "1";
+};
+
+img.onerror = () => {
+
+    console.log("Image not found:", photos[currentPhoto]);
+
+    isShowingPhoto = false;
+};
+
+img.src = photos[currentPhoto];
+
+        photoDiv.style.opacity = "1";
 
         setTimeout(()=>{
 
-            photoDiv.style.opacity="0";
+            photoDiv.style.opacity = "0";
+
+            setTimeout(()=>{
+                isShowingPhoto = false;
+            },1000);
 
         },2500);
 
         currentPhoto++;
-    }
-    else{
+
+    }else{
+
+        if(finaleShown) return;
+
+        finaleShown = true;
 
         grandFinale();
     }
@@ -475,30 +551,48 @@ function confetti(){
     }
 }
 
-sky.addEventListener(
-"click",
-e=>{
+let canLaunch = true;
 
-    launchFirework(
-        e.clientX
-    );
+sky.addEventListener("click",e=>{
+
+    if(!canLaunch) return;
+
+    canLaunch = false;
+
+    launchFirework(e.clientX);
+
+    setTimeout(()=>{
+        canLaunch = true;
+    },800);
 
 });
 
-sky.addEventListener(
-"touchstart",
-e=>{
+let touchLock = false;
 
-    const touch=
-    e.touches[0];
+sky.addEventListener("touchstart",(e)=>{
 
-    launchFirework(
-        touch.clientX
-    );
+    if(touchLock) return;
 
-},
-{passive:true}
-);
+    touchLock = true;
+
+    const touch = e.touches[0];
+
+    launchFirework(touch.clientX);
+
+    setTimeout(()=>{
+        touchLock = false;
+    },800);
+
+},{passive:true});
+
+document
+.getElementById("closeBtn")
+.addEventListener("click",()=>{
+
+    window.location.href = "treats.html";
+
+});
+
 
 </script>
 
